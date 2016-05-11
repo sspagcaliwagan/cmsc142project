@@ -8,17 +8,283 @@ typedef struct node{
 	struct node *next;
 }dict;
 
+typedef struct nodetag{
+	int x;
+	struct nodetag *sibling;
+	struct nodetag *child;
+	char letter;
+}node;
+
+int prefix(node *head, char *searchword){
+	int i;
+	node *lastltrptr = NULL;
+	node *ptr = NULL;
+	
+			for(i=0; i<strlen(searchword); i++){
+	    			if(i == 0){
+	    				ptr = head->child;
+	    				while(ptr != NULL){
+	    					if(ptr->letter == searchword[i]){
+	    						lastltrptr = ptr;
+	    						if(i == strlen(searchword)-1){
+	    							//printf("Valid prefix!\n");	    							
+	    							return 1;
+	    						}
+	    						break;
+	    					}
+	    					if(ptr->sibling == NULL){
+	    						//printf("Invalid prefix!\n");
+	    						return 0;
+	    					}
+	    					ptr = ptr->sibling;
+	    				}
+	    			}
+	    			else{
+	    				ptr = lastltrptr;
+	    				if(ptr->child == NULL){
+	    					//printf("Invalid prefix!\n");
+	    					return 0;
+	    				}
+	    				else{
+		    				if(ptr->child->letter != searchword[i]){
+		    					ptr = ptr->child;
+		    					while(ptr != NULL){
+		    						if(ptr->letter == searchword[i]){
+		    							lastltrptr = ptr;
+		    							if(i == strlen(searchword)-1){
+			    							//printf("Valid prefix!\n");
+			    							return 1;
+			    						}
+		    							break;
+		    						}
+		    						if(ptr->sibling == NULL){
+		    							//printf("Invalid prefix!\n");
+	    								return 0;
+		    						}
+		    						ptr = ptr->sibling;
+		    					}
+		    				}else{
+		    					lastltrptr = ptr->child;
+		    					if(i == strlen(searchword)-1){
+	    							//printf("Valid prefix!\n");
+	    							return 1;
+	    						}
+		    				}
+	    				}
+	    			}
+	    		}
+	
+	
+	
+	return 0;
+}
+
+
+void search(node *head, char *searchword){
+	int i;
+	node *lastltrptr = NULL;
+	node *ptr = NULL;
+	
+	if(strlen(searchword) < 3){
+		printf("Invalid word length!\n");
+		return;
+	}
+	if(strlen(searchword) > 30){
+		printf("Invalid word length!\n");
+		return;
+	}
+	
+			for(i=0; i<strlen(searchword); i++){
+	    			if(i == 0){
+	    				ptr = head->child;
+	    				while(ptr != NULL){
+	    					if(ptr->letter == searchword[i]){
+	    						lastltrptr = ptr;
+	    						if(i == strlen(searchword)-1){
+	    							if(lastltrptr->x == 0){
+	    								printf("Valid word!\n");
+	    								return;
+	    							}
+	    							else{
+	    								printf("Invalid word!\n");
+	    								return;
+	    							}
+	    						}
+	    						break;
+	    					}
+	    					if(ptr->sibling == NULL){
+	    						printf("Invalid word!\n");
+	    						return;
+	    					}
+	    					ptr = ptr->sibling;
+	    				}
+	    			}
+	    			else{
+	    				ptr = lastltrptr;
+	    				if(ptr->child == NULL){
+	    					printf("Invalid word!\n");
+	    					return;
+	    				}
+	    				else{
+		    				if(ptr->child->letter != searchword[i]){
+		    					ptr = ptr->child;
+		    					while(ptr != NULL){
+		    						if(ptr->letter == searchword[i]){
+		    							lastltrptr = ptr;
+		    							if(i == strlen(searchword)-1){
+			    							if(lastltrptr->x == 0){
+			    								printf("Valid word!\n");
+			    								return;
+			    							}
+			    							else{
+			    								printf("Invalid word!\n");
+			    								return;
+			    							}
+			    						}
+		    							break;
+		    						}
+		    						if(ptr->sibling == NULL){
+		    							printf("Invalid word!\n");
+	    								return;
+		    						}
+		    						ptr = ptr->sibling;
+		    					}
+		    				}else{
+		    					lastltrptr = ptr->child;
+		    					if(i == strlen(searchword)-1){
+	    							if(lastltrptr->x == 0){
+	    								printf("Valid word!\n");
+	    								return;
+	    							}
+	    							else{
+	    								printf("Invalid word!\n");
+	    								return;
+	    							}
+	    						}
+		    				}
+	    				}
+	    			}
+	    		}
+	
+	
+	
+	return;
+}
+
+void createTrie(node **head){
+	int i;
+	char word[30];
+    	FILE *fp = fopen ( "TWL06.txt", "r");
+
+	node *lastltrptr = NULL;
+	node *ptr = NULL;
+    	
+    	while(fscanf(fp, "%s", word) != EOF){
+	    	if((*head)->child == NULL){	
+	    		for(i=0; i<strlen(word); i++){
+	    			//printf("Okay\n");
+	    			node *temp;
+	    			temp = (node *)malloc(sizeof(node));
+	    			temp->sibling = temp->child = NULL;
+	    			temp->letter = word[i];
+	    			temp->x = 1;
+	    			
+	    			if(i == strlen(word)-1){
+	    				temp->x = 0;
+	    			}
+	    			
+	    			if(i == 0){
+	    				(*head)->child = temp;
+	    			}else{
+	    				node *ptr;
+	    				ptr = (*head)->child;
+	    				while(ptr != NULL){
+	    					if(ptr->child == NULL){
+	    						ptr->child = temp;
+	    						break;
+	    					}
+	    					
+	    					ptr = ptr->child;	
+	    				}
+	    			}		
+	    					
+	    		}
+	    	}else{
+	    		for(i=0; i<strlen(word); i++){
+	    			node *temp;
+	    			temp = (node *)malloc(sizeof(node));
+	    			temp->sibling = temp->child = NULL;
+	    			temp->letter = word[i];
+	    			temp->x = 1;
+	    			
+	    			if(i == strlen(word)-1){
+	    				temp->x = 0;
+	    			}
+	    		
+	    			if(i == 0){
+	    				ptr = (*head)->child;
+	    				while(ptr != NULL){
+	    					if(ptr->letter == word[i]){
+	    						lastltrptr = ptr;
+	    						break;
+	    					}
+	    					if(ptr->sibling == NULL){
+	    						ptr->sibling = temp;
+	    						lastltrptr = ptr->sibling;
+		    					break;
+	    					}
+	    					ptr = ptr->sibling;
+	    				}
+	    			}
+	    			else{
+	    				ptr = lastltrptr;
+	    				if(ptr->child == NULL){
+	    					ptr->child = temp;
+	    					lastltrptr = ptr->child;
+	    				}
+	    				else{
+		    				if(ptr->child->letter != word[i]){
+		    					ptr = ptr->child;
+		    					while(ptr != NULL){
+		    						if(ptr->letter == word[i]){
+		    							lastltrptr = ptr;
+		    							break;
+		    						}
+		    						if(ptr->sibling == NULL){
+		    							ptr->sibling = temp;
+		    							lastltrptr = ptr->sibling;
+		    							break;
+		    						}
+		    						ptr = ptr->sibling;
+		    					}
+		    				}else{
+		    					lastltrptr = ptr->child;
+		    				}
+	    				}
+	    			}
+	    		}
+	    	}
+    	}
+    	
+    	fclose ( fp );	
+    	printf ("Dictionary loaded.\n");
+}
+
 int main(){
 	int start, move, N, validCount;
 	int *nopts, **option;
-	char **letters, *tempString;
+	char **letters, *tempString, curString[50];
 	dict *head, *newWord, *ptr, *ptr2, *ptr3, *answerKey;
-	int i, k, l, m, x, y, candidate, prevCandidate, prevCandidateX, prevCandidateY;
+	node *triehead;
+	int i, k, l, m, x, y, candidate, prevCandidate, prevCandidateX, prevCandidateY, temp;
 	int instances, dimensions;
 	FILE *fp;
 	int j; //for tracing	
 
 	head = NULL;	
+	triehead = (node*)malloc(sizeof(node));
+	triehead->sibling = triehead->child = NULL;
+	createTrie(&triehead);	
 
 	// read dictionary
 	fp = fopen("TWL06.txt", "r");
@@ -154,80 +420,194 @@ int main(){
 
 							if(prevCandidateX-1>=0 && prevCandidateY-1>=0){	//northeast
 								candidate = (prevCandidateX-1)*N + prevCandidateY-1;
-								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);
+								k = 0;
+								for(i=1; i<move; i++){								
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX-1)][(prevCandidateY-1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");	
 							}
 
 							if(prevCandidateX-1>=0){	//north		
 								candidate = (prevCandidateX-1)*N + prevCandidateY;		
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);				
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){															
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+										
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX-1)][prevCandidateY];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");	
 							}
 
 							if(prevCandidateX-1>=0 && prevCandidateY+1<N){	//northwest
 								candidate = (prevCandidateX-1)*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){															
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX-1)][(prevCandidateY+1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");
 							}
 
 							if(prevCandidateY-1>=0){	//east
 								candidate = prevCandidateX*N + prevCandidateY-1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){																
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[prevCandidateX][(prevCandidateY-1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");
 							}
 
 							if(prevCandidateY+1<N){		//west
 								candidate = prevCandidateX*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){															
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[prevCandidateX][(prevCandidateY+1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");
 							}
 							if(prevCandidateX+1<N && prevCandidateY-1>=0){	//southeast
 								candidate = (prevCandidateX+1)*N + prevCandidateY-1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){																
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX+1)][(prevCandidateY-1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");
 							}
 							if(prevCandidateX+1<N){		//south
 								candidate = (prevCandidateX+1)*N + prevCandidateY;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){															
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX+1)][prevCandidateY];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");	
 							}
 
 							if(prevCandidateX+1<N && prevCandidateY+1<N){	//southwest
 								candidate = (prevCandidateX+1)*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								for(i=move-1; i>=1; i--)
-									if(candidate == option[i][nopts[i]])
-										break;						
-								if (i==0)
-									option[move][++nopts[move]] = candidate;
+								k = 0;
+								for(i=1; i<move; i++){																
+									temp = option[i][nopts[i]];
+									//printf("%d-", temp);								
+									if(candidate == temp)
+										break;
+									curString[k] = letters[(temp/N)][(temp%N)];
+									k++;
+								}
+								if(i==move){								
+									//printf("%d-", candidate);
+									curString[k] = letters[(prevCandidateX+1)][(prevCandidateY+1)];
+									curString[k+1] = '\0';
+									if (prefix(triehead,curString)==1){
+										//printf("Valid Prefix: %s\n", curString);									
+										option[move][++nopts[move]] = candidate;
+									}
+								}
+								//printf("\n");	
 							}
 
 							if(move>3)	//at least three letters
@@ -235,14 +615,16 @@ int main(){
 						}
 					}				
 
-					// for tracing candidate generation
-					// printf("Move : %d\n", move);
-					// for(i=1; i<=move; i++){
-					// 	for(j=1; j<=nopts[i]; j++){
-					// 		if (option[i][j]>-2) printf("%2i,",option[i][j]);
-					// 	}
-					// 	printf("\n");
-					// }printf("===============\n");
+					//for tracing candidate generation
+					/*
+					printf("Move : %d\n", move);
+					for(i=1; i<=move; i++){
+						for(j=1; j<=nopts[i]; j++){
+					 		if (option[i][j]>-2) printf("%2i,",option[i][j]);
+					 	}
+					 	printf("\n");
+					}printf("===============\n");
+					*/
 				}
 			}
 			else 
