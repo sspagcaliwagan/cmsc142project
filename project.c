@@ -20,59 +20,59 @@ int prefix(node *head, char *searchword){
 	node *lastltrptr = NULL;
 	node *ptr = NULL;
 	
-			for(i=0; i<strlen(searchword); i++){
-	    			if(i == 0){
-	    				ptr = head->child;
-	    				while(ptr != NULL){
-	    					if(ptr->letter == searchword[i]){
-	    						lastltrptr = ptr;
-	    						if(i == strlen(searchword)-1){
-	    							//printf("Valid prefix!\n");	    							
-	    							return 1;
-	    						}
-	    						break;
-	    					}
-	    					if(ptr->sibling == NULL){
-	    						//printf("Invalid prefix!\n");
-	    						return 0;
-	    					}
-	    					ptr = ptr->sibling;
-	    				}
-	    			}
-	    			else{
-	    				ptr = lastltrptr;
-	    				if(ptr->child == NULL){
-	    					//printf("Invalid prefix!\n");
-	    					return 0;
-	    				}
-	    				else{
-		    				if(ptr->child->letter != searchword[i]){
-		    					ptr = ptr->child;
-		    					while(ptr != NULL){
-		    						if(ptr->letter == searchword[i]){
-		    							lastltrptr = ptr;
-		    							if(i == strlen(searchword)-1){
-			    							//printf("Valid prefix!\n");
-			    							return 1;
-			    						}
-		    							break;
-		    						}
-		    						if(ptr->sibling == NULL){
-		    							//printf("Invalid prefix!\n");
-	    								return 0;
-		    						}
-		    						ptr = ptr->sibling;
-		    					}
-		    				}else{
-		    					lastltrptr = ptr->child;
-		    					if(i == strlen(searchword)-1){
+	for(i=0; i<strlen(searchword); i++){
+			if(i == 0){
+				ptr = head->child;
+				while(ptr != NULL){
+					if(ptr->letter == searchword[i]){
+						lastltrptr = ptr;
+						if(i == strlen(searchword)-1){
+							//printf("Valid prefix!\n");	    							
+							return 1;
+						}
+						break;
+					}
+					if(ptr->sibling == NULL){
+						//printf("Invalid prefix!\n");
+						return 0;
+					}
+					ptr = ptr->sibling;
+				}
+			}
+			else{
+				ptr = lastltrptr;
+				if(ptr->child == NULL){
+					//printf("Invalid prefix!\n");
+					return 0;
+				}
+				else{
+    				if(ptr->child->letter != searchword[i]){
+    					ptr = ptr->child;
+    					while(ptr != NULL){
+    						if(ptr->letter == searchword[i]){
+    							lastltrptr = ptr;
+    							if(i == strlen(searchword)-1){
 	    							//printf("Valid prefix!\n");
 	    							return 1;
 	    						}
-		    				}
-	    				}
-	    			}
-	    		}
+    							break;
+    						}
+    						if(ptr->sibling == NULL){
+    							//printf("Invalid prefix!\n");
+								return 0;
+    						}
+    						ptr = ptr->sibling;
+    					}
+    				}else{
+    					lastltrptr = ptr->child;
+    					if(i == strlen(searchword)-1){
+							//printf("Valid prefix!\n");
+							return 1;
+						}
+    				}
+				}
+			}
+		}
 	
 	
 	
@@ -94,13 +94,44 @@ int search(node *head, char *searchword){
 	// 	return 0;
 	// }
 	
-			for(i=0; i<strlen(searchword); i++){
-	    			if(i == 0){
-	    				ptr = head->child;
-	    				while(ptr != NULL){
-	    					if(ptr->letter == searchword[i]){
-	    						lastltrptr = ptr;
-	    						if(i == strlen(searchword)-1){
+	for(i=0; i<strlen(searchword); i++){
+			if(i == 0){
+				ptr = head->child;
+				while(ptr != NULL){
+					if(ptr->letter == searchword[i]){
+						lastltrptr = ptr;
+						if(i == strlen(searchword)-1){
+							if(lastltrptr->x == 0){
+								// printf("Valid word!\n");
+								return 1;
+							}
+							else{
+								// printf("Invalid word!\n");
+								return 0;
+							}
+						}
+						break;
+					}
+					if(ptr->sibling == NULL){
+						// printf("Invalid word!\n");
+						return 0;
+					}
+					ptr = ptr->sibling;
+				}
+			}
+			else{
+				ptr = lastltrptr;
+				if(ptr->child == NULL){
+					// printf("Invalid word!\n");
+					return 0;
+				}
+				else{
+    				if(ptr->child->letter != searchword[i]){
+    					ptr = ptr->child;
+    					while(ptr != NULL){
+    						if(ptr->letter == searchword[i]){
+    							lastltrptr = ptr;
+    							if(i == strlen(searchword)-1){
 	    							if(lastltrptr->x == 0){
 	    								// printf("Valid word!\n");
 	    								return 1;
@@ -110,61 +141,30 @@ int search(node *head, char *searchword){
 	    								return 0;
 	    							}
 	    						}
-	    						break;
-	    					}
-	    					if(ptr->sibling == NULL){
-	    						// printf("Invalid word!\n");
-	    						return 0;
-	    					}
-	    					ptr = ptr->sibling;
-	    				}
-	    			}
-	    			else{
-	    				ptr = lastltrptr;
-	    				if(ptr->child == NULL){
-	    					// printf("Invalid word!\n");
-	    					return 0;
-	    				}
-	    				else{
-		    				if(ptr->child->letter != searchword[i]){
-		    					ptr = ptr->child;
-		    					while(ptr != NULL){
-		    						if(ptr->letter == searchword[i]){
-		    							lastltrptr = ptr;
-		    							if(i == strlen(searchword)-1){
-			    							if(lastltrptr->x == 0){
-			    								// printf("Valid word!\n");
-			    								return 1;
-			    							}
-			    							else{
-			    								// printf("Invalid word!\n");
-			    								return 0;
-			    							}
-			    						}
-		    							break;
-		    						}
-		    						if(ptr->sibling == NULL){
-		    							// printf("Invalid word!\n");
-	    								return 0;
-		    						}
-		    						ptr = ptr->sibling;
-		    					}
-		    				}else{
-		    					lastltrptr = ptr->child;
-		    					if(i == strlen(searchword)-1){
-	    							if(lastltrptr->x == 0){
-	    								// printf("Valid word!\n");
-	    								return 1;
-	    							}
-	    							else{
-	    								// printf("Invalid word!\n");
-	    								return 0;
-	    							}
-	    						}
-		    				}
-	    				}
-	    			}
-	    		}
+    							break;
+    						}
+    						if(ptr->sibling == NULL){
+    							// printf("Invalid word!\n");
+								return 0;
+    						}
+    						ptr = ptr->sibling;
+    					}
+    				}else{
+    					lastltrptr = ptr->child;
+    					if(i == strlen(searchword)-1){
+							if(lastltrptr->x == 0){
+								// printf("Valid word!\n");
+								return 1;
+							}
+							else{
+								// printf("Invalid word!\n");
+								return 0;
+							}
+						}
+    				}
+				}
+			}
+		}
 	
 	
 	
@@ -179,95 +179,95 @@ void createTrie(node **head){
 	node *lastltrptr = NULL;
 	node *ptr = NULL;
     	
-    	while(fscanf(fp, "%s", word) != EOF){
-	    	if((*head)->child == NULL){	
-	    		for(i=0; i<strlen(word); i++){
-	    			//printf("Okay\n");
-	    			node *temp;
-	    			temp = (node *)malloc(sizeof(node));
-	    			temp->sibling = temp->child = NULL;
-	    			temp->letter = word[i];
-	    			temp->x = 1;
-	    			
-	    			if(i == strlen(word)-1){
-	    				temp->x = 0;
-	    			}
-	    			
-	    			if(i == 0){
-	    				(*head)->child = temp;
-	    			}else{
-	    				node *ptr;
-	    				ptr = (*head)->child;
-	    				while(ptr != NULL){
-	    					if(ptr->child == NULL){
-	    						ptr->child = temp;
-	    						break;
+	while(fscanf(fp, "%s", word) != EOF){
+    	if((*head)->child == NULL){	
+    		for(i=0; i<strlen(word); i++){
+    			//printf("Okay\n");
+    			node *temp;
+    			temp = (node *)malloc(sizeof(node));
+    			temp->sibling = temp->child = NULL;
+    			temp->letter = word[i];
+    			temp->x = 1;
+    			
+    			if(i == strlen(word)-1){
+    				temp->x = 0;
+    			}
+    			
+    			if(i == 0){
+    				(*head)->child = temp;
+    			}else{
+    				node *ptr;
+    				ptr = (*head)->child;
+    				while(ptr != NULL){
+    					if(ptr->child == NULL){
+    						ptr->child = temp;
+    						break;
+    					}
+    					
+    					ptr = ptr->child;	
+    				}
+    			}		
+    					
+    		}
+    	}else{
+    		for(i=0; i<strlen(word); i++){
+    			node *temp;
+    			temp = (node *)malloc(sizeof(node));
+    			temp->sibling = temp->child = NULL;
+    			temp->letter = word[i];
+    			temp->x = 1;
+    			
+    			if(i == strlen(word)-1){
+    				temp->x = 0;
+    			}
+    		
+    			if(i == 0){
+    				ptr = (*head)->child;
+    				while(ptr != NULL){
+    					if(ptr->letter == word[i]){
+    						lastltrptr = ptr;
+    						break;
+    					}
+    					if(ptr->sibling == NULL){
+    						ptr->sibling = temp;
+    						lastltrptr = ptr->sibling;
+	    					break;
+    					}
+    					ptr = ptr->sibling;
+    				}
+    			}
+    			else{
+    				ptr = lastltrptr;
+    				if(ptr->child == NULL){
+    					ptr->child = temp;
+    					lastltrptr = ptr->child;
+    				}
+    				else{
+	    				if(ptr->child->letter != word[i]){
+	    					ptr = ptr->child;
+	    					while(ptr != NULL){
+	    						if(ptr->letter == word[i]){
+	    							lastltrptr = ptr;
+	    							break;
+	    						}
+	    						if(ptr->sibling == NULL){
+	    							ptr->sibling = temp;
+	    							lastltrptr = ptr->sibling;
+	    							break;
+	    						}
+	    						ptr = ptr->sibling;
 	    					}
-	    					
-	    					ptr = ptr->child;	
-	    				}
-	    			}		
-	    					
-	    		}
-	    	}else{
-	    		for(i=0; i<strlen(word); i++){
-	    			node *temp;
-	    			temp = (node *)malloc(sizeof(node));
-	    			temp->sibling = temp->child = NULL;
-	    			temp->letter = word[i];
-	    			temp->x = 1;
-	    			
-	    			if(i == strlen(word)-1){
-	    				temp->x = 0;
-	    			}
-	    		
-	    			if(i == 0){
-	    				ptr = (*head)->child;
-	    				while(ptr != NULL){
-	    					if(ptr->letter == word[i]){
-	    						lastltrptr = ptr;
-	    						break;
-	    					}
-	    					if(ptr->sibling == NULL){
-	    						ptr->sibling = temp;
-	    						lastltrptr = ptr->sibling;
-		    					break;
-	    					}
-	    					ptr = ptr->sibling;
-	    				}
-	    			}
-	    			else{
-	    				ptr = lastltrptr;
-	    				if(ptr->child == NULL){
-	    					ptr->child = temp;
+	    				}else{
 	    					lastltrptr = ptr->child;
 	    				}
-	    				else{
-		    				if(ptr->child->letter != word[i]){
-		    					ptr = ptr->child;
-		    					while(ptr != NULL){
-		    						if(ptr->letter == word[i]){
-		    							lastltrptr = ptr;
-		    							break;
-		    						}
-		    						if(ptr->sibling == NULL){
-		    							ptr->sibling = temp;
-		    							lastltrptr = ptr->sibling;
-		    							break;
-		    						}
-		    						ptr = ptr->sibling;
-		    					}
-		    				}else{
-		    					lastltrptr = ptr->child;
-		    				}
-	    				}
-	    			}
-	    		}
-	    	}
+    				}
+    			}
+    		}
     	}
-    	
-    	fclose ( fp );	
-    	printf ("Dictionary loaded.\n");
+	}
+	
+	fclose ( fp );	
+	printf ("Dictionary loaded.\n");
 }
 
 void addToOptions(node *triehead, int candidate, char *curString, char *letters, int **option, int *nopts, int move){
