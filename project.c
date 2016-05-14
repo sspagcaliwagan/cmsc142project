@@ -270,6 +270,27 @@ void createTrie(node **head){
     	printf ("Dictionary loaded.\n");
 }
 
+void addToOptions(node *triehead, int candidate, char *curString, char *letters, int **option, int *nopts, int move){
+	int i, k = 0, temp;
+	for(i=1; i<move; i++){								
+		temp = option[i][nopts[i]];
+		//printf("%d-", temp);								
+		if(candidate == temp)
+			break;
+		curString[k] = letters[temp];
+		k++;
+	}
+	if(i==move){								
+		//printf("%d-", candidate);
+		curString[k] = letters[candidate];
+		curString[k+1] = '\0';
+		if (prefix(triehead,curString)==1){
+			//printf("Valid Prefix: %s\n", curString);									
+			option[move][++nopts[move]] = candidate;
+		}
+	}
+}
+
 int main(){
 	int start, move, N, validCount;
 	int *nopts, **option;
@@ -385,197 +406,57 @@ int main(){
 							prevCandidateY = prevCandidate % N;
 							// printf("prevCandidateX: %d, prevCandidateY: %d\n", prevCandidateX, prevCandidateY);						
 
-							//todo: future optimization check if current prefix (prevCandidates+candidate) is found in the dictionary (up to first 4 letters?)
-
 							if(prevCandidateX-1>=0 && prevCandidateY-1>=0){	//northeast
 								candidate = (prevCandidateX-1)*N + prevCandidateY-1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);
-								k = 0;
-								for(i=1; i<move; i++){								
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");	
 							}
 
 							if(prevCandidateX-1>=0){	//north		
 								candidate = (prevCandidateX-1)*N + prevCandidateY;		
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);				
-								k = 0;
-								for(i=1; i<move; i++){															
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-										
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");	
 							}
 
 							if(prevCandidateX-1>=0 && prevCandidateY+1<N){	//northwest
 								candidate = (prevCandidateX-1)*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){															
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");
 							}
 
 							if(prevCandidateY-1>=0){	//east
 								candidate = prevCandidateX*N + prevCandidateY-1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){																
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");
 							}
 
 							if(prevCandidateY+1<N){		//west
 								candidate = prevCandidateX*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){															
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");
 							}
 							if(prevCandidateX+1<N && prevCandidateY-1>=0){	//southeast
 								candidate = (prevCandidateX+1)*N + prevCandidateY-1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){																
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");
 							}
 							if(prevCandidateX+1<N){		//south
 								candidate = (prevCandidateX+1)*N + prevCandidateY;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){															
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");	
 							}
 
 							if(prevCandidateX+1<N && prevCandidateY+1<N){	//southwest
 								candidate = (prevCandidateX+1)*N + prevCandidateY+1;
 								// printf("candidate: %d ? prevCandidate: %d\n", candidate, prevCandidate);	
-								k = 0;
-								for(i=1; i<move; i++){																
-									temp = option[i][nopts[i]];
-									//printf("%d-", temp);								
-									if(candidate == temp)
-										break;
-									curString[k] = letters[temp];
-									k++;
-								}
-								if(i==move){								
-									//printf("%d-", candidate);
-									curString[k] = letters[candidate];
-									curString[k+1] = '\0';
-									if (prefix(triehead,curString)==1){
-										//printf("Valid Prefix: %s\n", curString);									
-										option[move][++nopts[move]] = candidate;
-									}
-								}
+								addToOptions(triehead,candidate, curString, letters, option, nopts, move);
 								//printf("\n");	
 							}
 
@@ -615,12 +496,10 @@ int main(){
 		free(nopts);
 		for(k=0; k<((N*N)+2); k++)
 			free(option[k]);
-		free(option);
-		
+		free(option);		
 		free(letters);
-
 	}
-	fclose(fp);
+	fclose(fp);	//close input file
 	
 	//free dictionary
 	
