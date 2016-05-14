@@ -273,7 +273,7 @@ void createTrie(node **head){
 int main(){
 	int start, move, N, validCount;
 	int *nopts, **option;
-	char **letters, *tempString, curString[50];
+	char *letters, *tempString, curString[50];
 	dict *newWord, *ptr2, *ptr3, *answerKey;
 	node *triehead;
 	int i, k, l, m, x, y, candidate, prevCandidate, prevCandidateX, prevCandidateY, temp;
@@ -297,23 +297,19 @@ int main(){
 		// printf("N : %d\n", N);
 		nopts = (int *) malloc(sizeof(int)*((N*N)+2));
 		option = (int **) malloc(sizeof(int*)*((N*N)+2));
-		letters = (char **) malloc(sizeof(char*)*N);
+		letters = (char *) malloc(sizeof(char)*N);
 		for(k=0; k<((N*N)+2); k++){
 			option[k] = (int *) malloc(sizeof(int)*((N*N)+2));	
 						
 		}
-		for(k=0; k<N; k++)
-			letters[k] = (char *) malloc(sizeof(char)*N);	
+		
+		letters = (char *) malloc(sizeof(char)*N);	
 
 		tempString = (char *) malloc(sizeof(char)*N);
 		answerKey = NULL;
 
-		for(k=0; k<N; k++){	//read dictionary file
-			for(l=0; l<N; l++){
-				fscanf(fp, "%c ", &letters[k][l]);
-				// printf("%c", letters[k][l]);				
-			}
-			// printf("\n");
+		for(k=0; k<N*N; k++){	//read dictionary file			
+			fscanf(fp, "%c ", &letters[k]);
 		}
 		
 		printf("\n=======================================\n");
@@ -334,11 +330,8 @@ int main(){
 				if(move==(N*N)+1){
 					for(i=1;i<move;i++){
 						if(option[i][nopts[i]]>-1){
-							//printf("%2i,",option[i][nopts[i]]);	//mute -1 value in printing
-							x = option[i][nopts[i]] / N;
-							y = option[i][nopts[i]] % N;
-							// printf("%c,", letters[x][y]);
-							tempString[(i-1)] = letters[x][y];
+							//printf("%2i,",option[i][nopts[i]]);	//mute -1 value in printing							
+							tempString[(i-1)] = letters[option[i][nopts[i]]];
  							
 						}else{
 							tempString[(i-1)] = '\0';
@@ -349,9 +342,7 @@ int main(){
 
 					//check if word is found in the trie
 					
-					if(search(triehead, tempString)==1){	//found in dictionary
-					// printf("curword: %s, dictword: %s\n", tempString, ptr->word);
-						printf("Valid word: %s\n", tempString);
+					if(search(triehead, tempString)==1){	//found in dictionary						
 						newWord = (dict *) malloc(sizeof(dict));
 						newWord->next = NULL;
 						strcpy(newWord->word, tempString);	
@@ -405,12 +396,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX-1)][(prevCandidateY-1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -429,13 +420,13 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 										
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX-1)][prevCandidateY];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -454,12 +445,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX-1)][(prevCandidateY+1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -478,13 +469,13 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[prevCandidateX][(prevCandidateY-1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -503,12 +494,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[prevCandidateX][(prevCandidateY+1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -526,12 +517,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX+1)][(prevCandidateY-1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -549,12 +540,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX+1)][prevCandidateY];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -573,12 +564,12 @@ int main(){
 									//printf("%d-", temp);								
 									if(candidate == temp)
 										break;
-									curString[k] = letters[(temp/N)][(temp%N)];
+									curString[k] = letters[temp];
 									k++;
 								}
 								if(i==move){								
 									//printf("%d-", candidate);
-									curString[k] = letters[(prevCandidateX+1)][(prevCandidateY+1)];
+									curString[k] = letters[candidate];
 									curString[k+1] = '\0';
 									if (prefix(triehead,curString)==1){
 										//printf("Valid Prefix: %s\n", curString);									
@@ -625,8 +616,7 @@ int main(){
 		for(k=0; k<((N*N)+2); k++)
 			free(option[k]);
 		free(option);
-		for(k=0; k<N; k++)
-			free(letters[k]);
+		
 		free(letters);
 
 	}
