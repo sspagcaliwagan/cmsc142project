@@ -274,35 +274,17 @@ int main(){
 	int start, move, N, validCount;
 	int *nopts, **option;
 	char **letters, *tempString, curString[50];
-	dict *head, *newWord, *ptr, *ptr2, *ptr3, *answerKey;
+	dict *newWord, *ptr2, *ptr3, *answerKey;
 	node *triehead;
 	int i, k, l, m, x, y, candidate, prevCandidate, prevCandidateX, prevCandidateY, temp;
 	int instances, dimensions;
 	FILE *fp;
 	int j; //for tracing	
 
-	head = NULL;	
+
 	triehead = (node*)malloc(sizeof(node));
 	triehead->sibling = triehead->child = NULL;
 	createTrie(&triehead);	
-
-	// read dictionary
-	fp = fopen("TWL06.txt", "r");
-	while(!feof(fp)){
-		newWord = (dict *) malloc(sizeof(dict));
-		newWord->next = NULL;
-		fscanf(fp, "%s", newWord->word);
-		// printf("%s, ", newWord->word);
-		if(head==NULL){
-			head = newWord;
-			ptr = head;
-		}else{
-			ptr->next = newWord;
-			ptr = ptr->next;
-		}		
-
-	}
-	fclose(fp);
 
 	//read input file
 	fp = fopen("input.txt", "r");
@@ -651,11 +633,6 @@ int main(){
 	fclose(fp);
 	
 	//free dictionary
-	ptr = head;
-	while(ptr!=NULL){
-		head = head->next;
-		free(ptr);
-		ptr = head;
-	}
+	
 		
 }
