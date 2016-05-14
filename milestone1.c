@@ -80,19 +80,19 @@ int prefix(node *head, char *searchword){
 }
 
 
-void search(node *head, char *searchword){
+int search(node *head, char *searchword){
 	int i;
 	node *lastltrptr = NULL;
 	node *ptr = NULL;
 	
-	if(strlen(searchword) < 3){
-		printf("Invalid word length!\n");
-		return;
-	}
-	if(strlen(searchword) > 30){
-		printf("Invalid word length!\n");
-		return;
-	}
+	// if(strlen(searchword) < 3){
+	// 	printf("Invalid word length!\n");
+	// 	return 0;
+	// }
+	// if(strlen(searchword) > 30){
+	// 	printf("Invalid word length!\n");
+	// 	return 0;
+	// }
 	
 			for(i=0; i<strlen(searchword); i++){
 	    			if(i == 0){
@@ -102,19 +102,19 @@ void search(node *head, char *searchword){
 	    						lastltrptr = ptr;
 	    						if(i == strlen(searchword)-1){
 	    							if(lastltrptr->x == 0){
-	    								printf("Valid word!\n");
-	    								return;
+	    								// printf("Valid word!\n");
+	    								return 1;
 	    							}
 	    							else{
-	    								printf("Invalid word!\n");
-	    								return;
+	    								// printf("Invalid word!\n");
+	    								return 0;
 	    							}
 	    						}
 	    						break;
 	    					}
 	    					if(ptr->sibling == NULL){
-	    						printf("Invalid word!\n");
-	    						return;
+	    						// printf("Invalid word!\n");
+	    						return 0;
 	    					}
 	    					ptr = ptr->sibling;
 	    				}
@@ -122,8 +122,8 @@ void search(node *head, char *searchword){
 	    			else{
 	    				ptr = lastltrptr;
 	    				if(ptr->child == NULL){
-	    					printf("Invalid word!\n");
-	    					return;
+	    					// printf("Invalid word!\n");
+	    					return 0;
 	    				}
 	    				else{
 		    				if(ptr->child->letter != searchword[i]){
@@ -133,19 +133,19 @@ void search(node *head, char *searchword){
 		    							lastltrptr = ptr;
 		    							if(i == strlen(searchword)-1){
 			    							if(lastltrptr->x == 0){
-			    								printf("Valid word!\n");
-			    								return;
+			    								// printf("Valid word!\n");
+			    								return 1;
 			    							}
 			    							else{
-			    								printf("Invalid word!\n");
-			    								return;
+			    								// printf("Invalid word!\n");
+			    								return 0;
 			    							}
 			    						}
 		    							break;
 		    						}
 		    						if(ptr->sibling == NULL){
-		    							printf("Invalid word!\n");
-	    								return;
+		    							// printf("Invalid word!\n");
+	    								return 0;
 		    						}
 		    						ptr = ptr->sibling;
 		    					}
@@ -153,12 +153,12 @@ void search(node *head, char *searchword){
 		    					lastltrptr = ptr->child;
 		    					if(i == strlen(searchword)-1){
 	    							if(lastltrptr->x == 0){
-	    								printf("Valid word!\n");
-	    								return;
+	    								// printf("Valid word!\n");
+	    								return 1;
 	    							}
 	    							else{
-	    								printf("Invalid word!\n");
-	    								return;
+	    								// printf("Invalid word!\n");
+	    								return 0;
 	    							}
 	    						}
 		    				}
@@ -362,42 +362,38 @@ int main(){
 							tempString[(i-1)] = '\0';
 							break;
 						}
-					}
+					}				
 					// printf("\n");
 
-					//check if word is found in the dictionary
-					ptr=head;
-					while(ptr!=NULL){	//traverse dictionary
-						if(strcmp(tempString, ptr->word)==0){	//found in dictionary
-							// printf("curword: %s, dictword: %s\n", tempString, ptr->word);
-							// printf("Valid word: %s\n", tempString);
-							newWord = (dict *) malloc(sizeof(dict));
-							newWord->next = NULL;
-							strcpy(newWord->word, tempString);	
+					//check if word is found in the trie
+					
+					if(search(triehead, tempString)==1){	//found in dictionary
+					// printf("curword: %s, dictword: %s\n", tempString, ptr->word);
+						printf("Valid word: %s\n", tempString);
+						newWord = (dict *) malloc(sizeof(dict));
+						newWord->next = NULL;
+						strcpy(newWord->word, tempString);	
 
-							if(answerKey==NULL){	//answer key is empty
-								answerKey = newWord;
-								ptr2 = answerKey;
-								validCount++;
+						if(answerKey==NULL){	//answer key is empty
+							answerKey = newWord;
+							ptr2 = answerKey;
+							validCount++;
 
-							}else{	//not empty
-								ptr3 = answerKey;
-								while(ptr3!=NULL){	//check if word already in answer key
-									if(strcmp(ptr3->word, newWord->word)==0){
-										break;
-									}
-									ptr3 = ptr3->next;
+						}else{	//not empty
+							ptr3 = answerKey;
+							while(ptr3!=NULL){	//check if word already in answer key
+								if(strcmp(ptr3->word, newWord->word)==0){
+									break;
 								}
-								if(ptr3==NULL){		//not in answer key : add
-									ptr2->next = newWord;
-									ptr2 = ptr2->next;
-									validCount++;
-								}								
-							}							
-							break;
+								ptr3 = ptr3->next;
+							}
+							if(ptr3==NULL){		//not in answer key : add
+								ptr2->next = newWord;
+								ptr2 = ptr2->next;
+								validCount++;
+							}								
 						}
-						ptr = ptr->next;
-					}					
+					}								
 					
 				}
 				//populate
