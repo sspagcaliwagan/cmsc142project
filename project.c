@@ -4,7 +4,7 @@
 #include <string.h>
 
 typedef struct node{
-	char word[45];	//estimate; change to max possible word len //optimized -> word = (char*) malloc(sizeof(char)*(N*N))
+	char *word;	
 	struct node *next;
 }dict;
 
@@ -366,6 +366,7 @@ int main(){
 					if(search(triehead, tempString)==1){	//found in dictionary						
 						newWord = (dict *) malloc(sizeof(dict));
 						newWord->next = NULL;
+						newWord->word = (char*) malloc(sizeof(char)*(N*N));
 						strcpy(newWord->word, tempString);	
 
 						if(answerKey==NULL){	//answer key is empty
@@ -488,6 +489,7 @@ int main(){
 		ptr2 = answerKey;
 		while(ptr2!=NULL){
 			printf("%s\n", ptr2->word);
+			free(ptr2->word);
 			answerKey = answerKey->next;
 			free(ptr2);
 			ptr2 = answerKey;
